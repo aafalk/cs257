@@ -2,4 +2,10 @@ NAME
     books.py
 
 SYNOPSIS
-    python3 books.py [--authors] [--titles] [--year]
+    python3 books.py author
+    python3 books.py title [-t, -p]
+    python3 books.py A B
+    python3 books.py [-h --help]
+
+DESCRIPTION
+    
