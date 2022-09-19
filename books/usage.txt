@@ -8,4 +8,10 @@ SYNOPSIS
     python3 books.py [-h --help]
 
 DESCRIPTION
+    author - Given a search string S, print a list of books whose titles contain S (case-insensitive)
+
+        [-t, -p] correspond to being able to sort the output by title (-t) or publication date (-p)
     
+    title - Given a search string S, print a list of authors whose names contain S (case-insensitive). Output automatically sorted alphabetically by surname, breaking ties with given name.
+
+    A,B - Given a range of years A to B, print a list of books published between years A and B, inclusive. Output automatically sorted by publication year.
