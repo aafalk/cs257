@@ -18,13 +18,40 @@ class BooksDataSourceTester(unittest.TestCase):
         authors = self.data_source.authors('Pratchett')
         self.assertTrue(len(authors) == 1)
         self.assertTrue(authors[0] == Author('Pratchett', 'Terry'))
+    
+    # Author tests
+    
+    def test_valid_author_input(self):
+        Execution
+        
+        Validation
+        
+    # Checks that authors alphabetizes and generally works
+    def test_if_authors_works:
+        tiny_data_source = BooksDataSource('tinybooks.csv')
+        author = tiny_data_source.authors('an')
+        self.assertTrue(len(author) == 3)
+        self.assertTrue(author[0].authors == 'Austen', 'Jane')
+        self.assertTrue(author[1].authors == 'Gaiman', 'Neil')
+        self.assertTrue(author[2].authors == 'Melville', 'Herman')
+        
+    def test_three_names:
+        author_three_names = BooksDataSource('authorthreenames.csv')
+        author = author_three_names.authors()
+        self.assertTrue(len(author) == 3)
+        self.assertTrue(author[0].authors == 'Bujold', 'Lois McMaster')
+        self.assertTrue(author[1].authors == 'Wodehouse', 'Pelham Grenville')
+        self.assertTrue(author[2].authors == 'Wodehouse', 'Pelham Grenville')
+        
+    
 
+    
 # Author
 #   Check if input is a string (assert #, expect failure)
-#   checks if method works with assert that it equals a premade correct output csv
-#   alphabetize works (use smaller premade list)
-#   Checks if method still works w 2/3 names
-#   Check empty result
+#   Done: checks if method works with assert that it equals a premade correct output csv
+#   Done: alphabetize works (use smaller premade list)
+#   Done: Checks if method still works w 2/3 names
+#   Break ties using given name
 
 # Books (title)
 #   Check if input is a string (assert #, expect failure)
