@@ -20,14 +20,9 @@ class BooksDataSourceTester(unittest.TestCase):
         self.assertTrue(authors[0] == Author('Pratchett', 'Terry'))
     
     # Author tests
-    
-    def test_valid_author_input(self):
-        Execution
-        
-        Validation
         
     # Checks that authors alphabetizes and generally works
-    def test_if_authors_works:
+    def test_if_authors_works(self):
         tiny_data_source = BooksDataSource('tinybooks.csv')
         author = tiny_data_source.authors('an')
         self.assertTrue(len(author) == 3)
@@ -35,7 +30,8 @@ class BooksDataSourceTester(unittest.TestCase):
         self.assertTrue(author[1].authors == 'Gaiman', 'Neil')
         self.assertTrue(author[2].authors == 'Melville', 'Herman')
         
-    def test_three_names:
+    # Checks if authors with three names are sorted correctly
+    def test_three_names(self):
         author_three_names = BooksDataSource('authorthreenames.csv')
         author = author_three_names.authors()
         self.assertTrue(len(author) == 3)
@@ -43,15 +39,31 @@ class BooksDataSourceTester(unittest.TestCase):
         self.assertTrue(author[1].authors == 'Wodehouse', 'Pelham Grenville')
         self.assertTrue(author[2].authors == 'Wodehouse', 'Pelham Grenville')
         
-    
+    # Tests if authors with the same surname are sorted correctly by given name
+    def test_tie_break(self):
+        author_tie_break = BooksDataSource('breakingtiesauthor.csv')
+        author = author_tie_break.authors()
+        self.assertTrue(len(author) == 3)
+        self.assertTrue(author[0].authors == 'Wodehouse', 'Carl')
+        self.assertTrue(author[1].authors == 'Wodehouse', 'Jack')
+        self.assertTrue(author[2].authors == 'Wodehouse', 'Pelham')
 
+    # Test if authors are returned in order regardless of case in search parameter
+    def test_case_sensitivity(self):
+        tiny_data_source = BooksDataSource('tinybooks.csv')
+        author = tiny_data_source.authors('AN')
+        self.assertTrue(len(author) == 3)
+        self.assertTrue(author[0].authors == 'Austen', 'Jane')
+        self.assertTrue(author[1].authors == 'Gaiman', 'Neil')
+        self.assertTrue(author[2].authors == 'Melville', 'Herman')
     
 # Author
 #   Check if input is a string (assert #, expect failure)
 #   Done: checks if method works with assert that it equals a premade correct output csv
 #   Done: alphabetize works (use smaller premade list)
 #   Done: Checks if method still works w 2/3 names
-#   Break ties using given name
+#   Done: Break ties using given name
+#   Done: Test if case-insensitivety works
 
 # Books (title)
 #   Check if input is a string (assert #, expect failure)
