@@ -5,7 +5,6 @@
     For use in the "books" assignment at the beginning of Carleton's
     CS 257 Software Design class, Fall 2022.
 '''
-
 import csv
 
 class Author:
@@ -44,7 +43,15 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
-        pass
+        print('Hi from BooksDataSource.__init__')
+        self.books = []
+        self.csv_file_name = books_csv_file_name
+        with open(self.csv_file_name) as f:
+            for line in f:
+                book_fields = line.split(',')
+                title = book_fields[0]
+                book = Book(title)
+                self.books.append(book)
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain

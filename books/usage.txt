@@ -2,9 +2,9 @@ NAME
     books.py
 
 SYNOPSIS
-    python3 books.py author
-    python3 books.py title [-t, -p]
-    python3 books.py A B
+    python3 books.py author search_text
+    python3 books.py title search_text [-t, -p]
+    python3 books.py year A B
     python3 books.py [-h --help]
 
 DESCRIPTION
