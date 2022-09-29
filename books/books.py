@@ -23,13 +23,32 @@ import booksdatasource
 
 #print(sys.argv)
 subcommand = sys.argv[1]
-if subcommand == 'author':
+
+if (len(sys.argv) == 2):
+    search_text = ''
+elif (len(sys.argv) == 3):
     search_text = sys.argv[2]
+    sort_by = 'title'
+elif subcommand == 'title' and len(sys.argv) == 4:
+    search_text = sys.argv[2]
+    sort_by = sys.argv[3]
+else:
+    sys.exit('wrong number of arguments')
+
+
+if subcommand == 'author':
+    data_source = booksdatasource.BooksDataSource('books1.csv')
+    books = data_source.authors(search_text)
     print('Searching for authors')
 elif subcommand == 'title':
-    search_text = sys.argv[2]
-    data_source = booksdatasource.BooksDataSource('books1.csv')
-    books = data_source.books(search_text)
+    print('1')
+    data_source = booksdatasource.BooksDataSource('tinybooks.csv')
+    print('2')
+    books = data_source.books(search_text,sort_by)
+    print('3')
+    print(books)
+    print(books[0].__lt__(books[0]))
+    #print(books[3].title)
 #    data_source = BooksDataSource('books1.csv')
     print('Searching for books')
 elif subcommand == 'year':

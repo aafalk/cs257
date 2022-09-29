@@ -18,6 +18,16 @@ class Author:
         ''' For simplicity, we're going to assume that no two authors have the same name. '''
         return self.surname == other.surname and self.given_name == other.given_name
 
+    def __lt__(self, other):
+        if self.surname < other.surname:
+            return True
+        if self.surname == other.surname and self.given_name < other.given_name:
+            return True
+        return False
+    # For sorting authors, you could add a "def __lt__(self, other)" method
+    # to go along with __eq__ to enable you to use the built-in "sorted" function
+    # to sort a list of Author objects.
+
 class Book:
     def __init__(self, title='', publication_year=None, authors=[]):
         ''' Note that the self.authors instance variable is a list of
@@ -32,6 +42,18 @@ class Book:
             thing as "same book". '''
         return self.title == other.title
 
+##FUCKING FIX SORT BY SPECIFIED
+    def __lt__(self, other):
+        print('entered __lt__')
+        print(sort_by)
+        if self.title < other.title:
+            return True
+        return False
+
+    # For sorting books, you could add a "def __lt__(self, other)" method
+    # to go along with __eq__ to enable you to use the built-in "sorted" function
+    # to sort a list of Book objects.
+
 class BooksDataSource:
     def __init__(self, books_csv_file_name):
         ''' The books CSV file format looks like this:
@@ -44,14 +66,16 @@ class BooksDataSource:
             a collection of Author objects and a collection of Book objects.
         '''
         print('Hi from BooksDataSource.__init__')
-        self.books = []
+        self.book_list = []
         self.csv_file_name = books_csv_file_name
         with open(self.csv_file_name) as f:
             for line in f:
-                book_fields = line.split(',')
+                book_fields = line.rsplit(',',2)
                 title = book_fields[0]
-                book = Book(title)
-                self.books.append(book)
+                publication_year = book_fields[1]
+                author = book_fields[2]
+                book = Book(title, publication_year)
+                self.book_list.append(book)
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain
@@ -59,6 +83,7 @@ class BooksDataSource:
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
+        print(self.books[2].publication_year)
         return []
 
     def books(self, search_text=None, sort_by='title'):
@@ -71,7 +96,17 @@ class BooksDataSource:
                 default -- same as 'title' (that is, if sort_by is anything other than 'year'
                             or 'title', just do the same thing you would do for 'title')
         '''
-        return []
+        print('in books')
+        book_output = []
+        #not case insensitive yet
+        for x in self.book_list:
+            if x.title.__contains__(search_text):
+                book_output.append(x)
+        
+        #sorting
+        
+
+        return book_output
 
     def books_between_years(self, start_year=None, end_year=None):
         ''' Returns a list of all the Book objects in this data source whose publication
@@ -84,3 +119,20 @@ class BooksDataSource:
             should be included.
         '''
         return []
+
+if __name__ == '__main__':
+    # Experimental test code as needed. In this case, I'm checking to see
+    # whether my __lt__ and __eq__ methods in class Author are up to the job of
+    # sorting a list of Author objects. Turns out, yes. Run this code by just
+    # typing "python3 booksdatasource.py" at the command line.
+    authors = [Author("Ondich", "Jeff Wilbert"),
+                Author("Ondich", "Jeff Dilbert"),
+               Author("Rafferty", "Anna"),
+               Author("Oesper", "Layla"),
+               Author("Ondich", "Elena")]
+    
+    for author in sorted(authors ):
+        print(author.given_name, author.surname)
+
+    books = [Book('p'),
+            ]
