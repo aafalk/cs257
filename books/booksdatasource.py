@@ -7,6 +7,9 @@
 '''
 import csv
 
+#importing packages to help with sorting(attrgetter used in line 213)
+from operator import itemgetter, attrgetter
+
 class Author:
     def __init__(self, surname='', given_name='', birth_year=None, death_year=None):
         self.surname = surname
@@ -42,11 +45,18 @@ class Book:
             thing as "same book". '''
         return self.title == other.title
 
-##FUCKING FIX SORT BY SPECIFIED
+    #Book Representation to help with sorting
+    def __repr__(self):
+        return repr((self.title, self.publication_year, self.authors))
+
     def __lt__(self, other):
-        print('entered __lt__')
-        print(sort_by)
         if self.title < other.title:
+            return True
+        if self.publication_year < other.publication_year:
+            return True
+        if self.title == other.title and self.publication_year < other.publication_year:
+            return True
+        if self.publication_year == other.publication_year and self.title < other.title:
             return True
         return False
 
@@ -65,17 +75,59 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
-        print('Hi from BooksDataSource.__init__')
+        #temp book list (output)
         self.book_list = []
         self.csv_file_name = books_csv_file_name
+
+        #iterating through csv by line
         with open(self.csv_file_name) as f:
             for line in f:
+                #temp author list for each book object
+                author_list = []
+                #book attributes in each line delimitted by commas
                 book_fields = line.rsplit(',',2)
-                title = book_fields[0]
+                #setting book attributes to variables
+                title = book_fields[0].strip('"')
                 publication_year = book_fields[1]
-                author = book_fields[2]
-                book = Book(title, publication_year)
+                #for multiple authors splitting them up
+                author_fields = book_fields[2].split(' and ')
+                #iterating through split up authors
+                for i in author_fields:
+                    #author attributes delimitted by commas
+                    author_string = i.rsplit(' ',2)
+                    #setting book attributes to variables
+                    given_name = author_string[0]
+                    surname = author_string[1]
+                    year = author_string[2].split('-')
+                    birth_year = year[0].strip('(')
+                    death_year = year[1].strip(')\n')
+                    #creating author object with the variables
+                    author = Author(surname, given_name, birth_year, death_year)
+                    #appending authors to temp authors list
+                    author_list.append(author)
+                #creating book object with title and pub year variables and list of author(s)
+                book = Book(title, publication_year, author_list)
+                #appending book object to outputted bok list
                 self.book_list.append(book)
+
+    def print_books(self, books):
+        ''' Prints out all books in given list of book objects
+        '''
+        for i in books:
+            print(i.title + ", " + "(" + i.publication_year + "),", end = ' ')
+            for j in i.authors:
+                print(j.given_name + " " + j.surname + " (" + j.birth_year + "-" + j.death_year + ") ", end = "")
+            print()
+        if len(books) == 0:
+            print('[]')
+
+    def print_authors(self, authors):
+        ''' Prints out all authors in given list of book objects
+        '''
+        for i in authors:
+            print(i.given_name + " " + i.surname + " (" + i.birth_year + "-" + i.death_year + ")")
+        if len(authors) == 0:
+            print('[]')
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain
@@ -83,8 +135,22 @@ class BooksDataSource:
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
-        print(self.books[2].publication_year)
-        return []
+        #temp author list (output)
+        author_output = []
+
+        #iterating through books accessing the authors list attribute in book object and searching for matching authors
+        for book in self.book_list:
+            for author in book.authors:
+                if search_text != None:
+                    if author.surname.upper().__contains__(search_text.upper()) or author.given_name.upper().__contains__(search_text.upper()):
+                        #making sure that the author added isn't already in the list. Allows for list outputed to have no duplicates
+                        if author not in author_output:
+                            author_output.append(author)
+                else:
+                    if author not in author_output:
+                        author_output.append(author)
+
+        return sorted(author_output)
 
     def books(self, search_text=None, sort_by='title'):
         ''' Returns a list of all the Book objects in this data source whose
@@ -96,15 +162,25 @@ class BooksDataSource:
                 default -- same as 'title' (that is, if sort_by is anything other than 'year'
                             or 'title', just do the same thing you would do for 'title')
         '''
-        print('in books')
+        #temp books list (output)
         book_output = []
-        #not case insensitive yet
-        for x in self.book_list:
-            if x.title.__contains__(search_text):
-                book_output.append(x)
-        
-        #sorting
-        
+
+        #searches matching book titles with search text
+        if search_text != None:
+            for x in self.book_list:
+                if x.title.upper().__contains__(search_text.upper()):
+                    book_output.append(x)
+        else:
+            book_output = self.book_list
+
+        #sorting by specified sorting method
+        if sort_by == 'title':
+            book_output = sorted(book_output,key=lambda book: book.title)
+        elif sort_by == 'year':
+            book_output = sorted(book_output,key=lambda book: book.publication_year)
+        else:
+            #error if sorting method is not within given options
+            sys.exit('Not a valid sorting specification')
 
         return book_output
 
@@ -118,21 +194,24 @@ class BooksDataSource:
             during start_year should be included. If both are None, then all books
             should be included.
         '''
-        return []
+        #temp book list (output)
+        bookbtw_output = []
 
-if __name__ == '__main__':
-    # Experimental test code as needed. In this case, I'm checking to see
-    # whether my __lt__ and __eq__ methods in class Author are up to the job of
-    # sorting a list of Author objects. Turns out, yes. Run this code by just
-    # typing "python3 booksdatasource.py" at the command line.
-    authors = [Author("Ondich", "Jeff Wilbert"),
-                Author("Ondich", "Jeff Dilbert"),
-               Author("Rafferty", "Anna"),
-               Author("Oesper", "Layla"),
-               Author("Ondich", "Elena")]
-    
-    for author in sorted(authors ):
-        print(author.given_name, author.surname)
+        #covers all options for start year end year inputs
+        if start_year != None and end_year != None:
+            for book in self.book_list:
+                if int(book.publication_year) >= int(start_year) and int(book.publication_year) <= int(end_year):
+                    bookbtw_output.append(book)
+        elif start_year == None and end_year != None:
+            for book in self.book_list:
+                if int(book.publication_year) <= int(end_year):
+                    bookbtw_output.append(book)
+        elif end_year == None and start_year != None:
+            for book in self.book_list:
+                if int(book.publication_year) >= int(start_year):
+                    bookbtw_output.append(book)
+        else:
+            bookbtw_output = self.book_list
 
-    books = [Book('p'),
-            ]
+        #returns sorted list with attrgetter method (imported method)
+        return sorted(bookbtw_output, key=attrgetter('publication_year', 'title'))

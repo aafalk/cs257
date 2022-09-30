@@ -3,15 +3,21 @@ NAME
 
 SYNOPSIS
     python3 books.py author search_text
-    python3 books.py title search_text [-t, -p]
+    python3 books.py title [search_text] [title | year]
     python3 books.py year A B
     python3 books.py [-h --help]
 
 DESCRIPTION
-    author - Given a search string S, print a list of books whose titles contain S (case-insensitive)
+    title - Given a search string S, print a list of books whose titles contain S (case-insensitive) or no search text to print all books
 
-        [-t, -p] correspond to being able to sort the output by title (-t) or publication date (-p)
+        [title | year] corresponds to being able to sort the output by title (title) or publication date (year) breaking ties with the other
     
-    title - Given a search string S, print a list of authors whose names contain S (case-insensitive). Output automatically sorted alphabetically by surname, breaking ties with given name.
+    author - Given a search string S, print a list of authors whose names contain S (case-insensitive). Output automatically sorted alphabetically by surname, breaking ties with given name.
 
-    A,B - Given a range of years A to B, print a list of books published between years A and B, inclusive. Output automatically sorted by publication year.
+    year - Given a range of years A to B, print a list of books published between years A and B, inclusive. Output automatically sorted by publication year. If you want to put in just start
+        year and no end year put a "-" for end year. For example, the command line input would be "python3 books.py year 1900 -" and vice versa. Also no years have to be inputted like 
+        "python3 books.py year - -".
+
+    help - information on methods available for books.py
+
+        

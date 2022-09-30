@@ -15,9 +15,10 @@ class BooksDataSourceTester(unittest.TestCase):
         pass
 
     def test_unique_author(self):
-        authors = self.data_source.authors('Pratchett')
+        data_source = BooksDataSource('tinybooks.csv')
+        authors = data_source.authors('Melville')
         self.assertTrue(len(authors) == 1)
-        self.assertTrue(authors[0] == Author('Pratchett', 'Terry'))
+        self.assertTrue(authors[0] == Author('Melville', 'Herman'))
     
     # Author tests
         
@@ -31,17 +32,17 @@ class BooksDataSourceTester(unittest.TestCase):
         self.assertTrue(author[2] == Author('Melville', 'Herman'))
         
     # Checks if authors with three names are sorted correctly
+    # Removes the duplicate name
     def test_three_names(self):
         author_three_names = BooksDataSource('authorthreenames.csv')
         author = author_three_names.authors()
-        self.assertTrue(len(author) == 3)
+        self.assertTrue(len(author) == 2)
         self.assertTrue(author[0] == Author('Bujold', 'Lois McMaster'))
         self.assertTrue(author[1] == Author('Wodehouse', 'Pelham Grenville'))
-        self.assertTrue(author[2] == Author('Wodehouse', 'Pelham Grenville'))
         
     # Tests if authors with the same surname are sorted correctly by given name
     def test_tie_break(self):
-        author_tie_break = BooksDataSource('breakingtiesauthor.csv')
+        author_tie_break = BooksDataSource('breakingtiesauthors.csv')
         author = author_tie_break.authors()
         self.assertTrue(len(author) == 3)
         self.assertTrue(author[0] == Author('Wodehouse', 'Carl'))
@@ -106,10 +107,9 @@ class BooksDataSourceTester(unittest.TestCase):
         breaking_ties_year = BooksDataSource('breakingtiesyear.csv')
         year = breaking_ties_year.books(sort_by = 'title')
         self.assertTrue(len(year) == 3)
-        self.assertTrue(year[0].publication_year == 1947)
-        self.assertTrue(year[1].publication_year == 1948)
-        self.assertTrue(year[2].publication_year == 1949)
-
+        self.assertTrue(int(year[0].publication_year) == 1847)
+        self.assertTrue(int(year[1].publication_year) == 1848)
+        self.assertTrue(int(year[2].publication_year) == 1849)
 
 
 # Books (title)
@@ -147,25 +147,25 @@ class BooksDataSourceTester(unittest.TestCase):
         tiny_data_source = BooksDataSource('tinybooks.csv')
         years = tiny_data_source.books_between_years()
         self.assertTrue(len(years) == 3)
-        self.assertTrue(years[0].publication_year == 1815)
-        self.assertTrue(years[1].publication_year == 1847)
-        self.assertTrue(years[2].publication_year == 1996)
+        self.assertTrue(int(years[0].publication_year) == 1815)
+        self.assertTrue(int(years[1].publication_year) == 1847)
+        self.assertTrue(int(years[2].publication_year) == 1996)
 
     # Test if list sorts correctly with only start date
     def test_only_start_year(self):
         tiny_data_source = BooksDataSource('tinybooks.csv')
         years = tiny_data_source.books_between_years(start_year = 1820)
         self.assertTrue(len(years) == 2)
-        self.assertTrue(years[0].publication_year == 1847)
-        self.assertTrue(years[1].publication_year == 1996)
+        self.assertTrue(int(years[0].publication_year) == 1847)
+        self.assertTrue(int(years[1].publication_year) == 1996)
 
     # Test if list sorts correctly with only end date
     def test_only_end_year(self):
         tiny_data_source = BooksDataSource('tinybooks.csv')
         years = tiny_data_source.books_between_years(end_year = 1950)
         self.assertTrue(len(years) == 2)
-        self.assertTrue(years[0].publication_year == 1815)
-        self.assertTrue(years[1].publication_year == 1847)
+        self.assertTrue(int(years[0].publication_year) == 1815)
+        self.assertTrue(int(years[1].publication_year) == 1847)
 
 # Books_between_years
 #   start year end year correctly inputed switched years
