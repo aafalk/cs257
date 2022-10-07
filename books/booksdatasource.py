@@ -49,16 +49,16 @@ class Book:
     def __repr__(self):
         return repr((self.title, self.publication_year, self.authors))
 
-    def __lt__(self, other):
-        if self.title < other.title:
-            return True
-        if self.publication_year < other.publication_year:
-            return True
-        if self.title == other.title and self.publication_year < other.publication_year:
-            return True
-        if self.publication_year == other.publication_year and self.title < other.title:
-            return True
-        return False
+    # def __lt__(self, other):
+    #     if self.title < other.title:
+    #         return True
+    #     if self.publication_year < other.publication_year:
+    #         return True
+    #     if self.title == other.title and self.publication_year < other.publication_year:
+    #         return True
+    #     if self.publication_year == other.publication_year and self.title < other.title:
+    #         return True
+    #     return False
 
     # For sorting books, you could add a "def __lt__(self, other)" method
     # to go along with __eq__ to enable you to use the built-in "sorted" function
@@ -109,25 +109,6 @@ class BooksDataSource:
                 book = Book(title, publication_year, author_list)
                 #appending book object to outputted bok list
                 self.book_list.append(book)
-
-    def print_books(self, books):
-        ''' Prints out all books in given list of book objects
-        '''
-        for i in books:
-            print(i.title + ", " + "(" + i.publication_year + "),", end = ' ')
-            for j in i.authors:
-                print(j.given_name + " " + j.surname + " (" + j.birth_year + "-" + j.death_year + ") ", end = "")
-            print()
-        if len(books) == 0:
-            print('[]')
-
-    def print_authors(self, authors):
-        ''' Prints out all authors in given list of book objects
-        '''
-        for i in authors:
-            print(i.given_name + " " + i.surname + " (" + i.birth_year + "-" + i.death_year + ")")
-        if len(authors) == 0:
-            print('[]')
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain

@@ -2,15 +2,35 @@
     books.py
     Alex Falk and Carl Zhang, 29 September 2022
     CS 257 Software Design class, Fall 2022.
+    Revised booksdatasource and books 10/6/2022 by Alex Falk and Carl Zhang
 '''
 
 import sys
 import booksdatasource
-#from booksdatasource import BooksDataSource
+
+def print_books(self, books):
+    ''' Prints out all books in given list of book objects
+    '''
+    for i in books:
+        print(i.title + ", " + "(" + i.publication_year + "),", end = ' ')
+        for j in i.authors:
+            print(j.given_name + " " + j.surname + " (" + j.birth_year + "-" + j.death_year + ") ", end = "")
+        print()
+    if len(books) == 0:
+        print('[]')
+
+def print_authors(self, authors):
+    ''' Prints out all authors in given list of book objects
+    '''
+    for i in authors:
+        print(i.given_name + " " + i.surname + " (" + i.birth_year + "-" + i.death_year + ")")
+    if len(authors) == 0:
+        print('[]')
+
 
 #if system inputted arguments too little
 if len(sys.argv) < 2:
-    sys.exit('wrong number of arguments, check help')
+    sys.exit('wrong number of arguments, check help by typing "python3 books.py -help"')
 else:
     subcommand = sys.argv[1]
 
@@ -29,8 +49,8 @@ if subcommand == 'author':
     
     #throw error wrong number of arguments
     else:
-        sys.exit('wrong number of arguments, check help')
-    data_source.print_authors(authors)
+        sys.exit('wrong number of arguments, check help by typing "python3 books.py -help"')
+    print_authors(data_source,authors)
 
 elif subcommand == 'title':
     print('Searching for books\n')
@@ -56,17 +76,17 @@ elif subcommand == 'title':
         elif sort_by == 'year':
             books = data_source.books(search_text, 'year')
         else:
-            sys.exit('wrong sort by argument for title search, check help')
+            sys.exit('wrong sort by argument for title search, check help by typing "python3 books.py -help"')
     #throw error wrong number of arguments
     else:
-        sys.exit('wrong number of arguments, check help')
-    data_source.print_books(books)
+        sys.exit('wrong number of arguments, check help by typing "python3 books.py -help"')
+    print_books(data_source,books)
 
 elif subcommand == 'year':
     print('Searching by year\n')
     data_source = booksdatasource.BooksDataSource('books1.csv')
     if (len(sys.argv) != 4):
-        sys.exit('wrong number of arguments, check help')
+        sys.exit('wrong number of arguments, check help by typing "python3 books.py -help"')
     
     #no years specified
     elif (sys.argv[2] == '-' and sys.argv[3] == '-'):
@@ -79,11 +99,11 @@ elif subcommand == 'year':
         books = data_source.books_between_years(start_year = sys.argv[2])
     #throws error if start or end year is not an integer
     elif (not float(sys.argv[2]).is_integer() or not float(sys.argv[3]).is_integer()):
-        sys.exit('wrong between years input, check help')
+        sys.exit('wrong between years input, check help by typing "python3 books.py -help"')
     else:
         #if both years specified
         books = data_source.books_between_years(start_year = sys.argv[2], end_year = sys.argv[3])
-    data_source.print_books(books)
+    print_books(data_source,books)
     
 #help subcommandx
 elif subcommand == '-h' or subcommand == 'help':
