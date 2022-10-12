@@ -8,7 +8,7 @@ WHERE athletes.noc = 'JAM';
 
 SELECT athletes.name, event_results.medal_id, games.year
 FROM athletes, event_results, games
-WHERE athletes.name = 'Greg Louganis'
+WHERE athletes.name = 'Gregory Efthimios "Greg" Louganis'
 AND athletes.id = event_results.athlete_id
 AND event_results.medal_id != 'NA'
 ORDER BY games.year;
