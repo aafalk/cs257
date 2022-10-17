@@ -52,7 +52,7 @@ with open('athlete_events.csv') as original_data_file, open('athletes.csv', 'w')
         athlete_name = row[1]
         sex_id = sexes[row[2]]
         noc_id = nocs[row[7]]
-        if athlete_id not in athletes:
+        if athlete_name not in athletes:
             athletes[athlete_name] = athlete_id
             writer.writerow([athlete_id, athlete_name, sex_id, noc_id])
 
