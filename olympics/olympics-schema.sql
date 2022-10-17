@@ -52,8 +52,8 @@ CREATE TABLE event_results (
 );
 
 CREATE TABLE medal_count (
-    noc_id integer
-    gold integer
-    silver integer
+    noc_id integer,
+    gold integer,
+    silver integer,
     bronze integer
 );
