@@ -12,7 +12,7 @@ FROM event_results, athletes, medals, games
 WHERE event_results.athlete_id = athletes.id
 AND athletes.name = 'Gregory Efthimios "Greg" Louganis'
 AND event_results.medal_id = medals.id
-AND medals.medal = 'Gold'
+AND medals.medal != 'NA'
 AND event_results.game_id = games.id
 ORDER BY games.year;
 
