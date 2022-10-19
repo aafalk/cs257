@@ -1,13 +1,11 @@
 '''
     olympics.py
-    Alex Falk, 17 Oct 2022
+    Alex Falk, 19 Oct 2022
 
 '''
 import sys
 import psycopg2
 import config
-
-#TODO Command line parsing
 
 def get_connection():
     try:
@@ -28,14 +26,14 @@ def get_athletes(search_noc):
         cursor = connection.cursor()
 
         # Execute the query
-        query = '''SELECT athletes.name, nocs.noc FROM athletes, nocs WHERE nocs.noc = %s AND athletes.noc_id = nocs.id;'''
+        query = '''SELECT athletes.name FROM athletes, nocs WHERE nocs.noc = %s AND athletes.noc_id = nocs.id;'''
         cursor.execute(query, (search_noc,))
 
         # Iterate over the query results to produce the list of athlete names.
         for row in cursor:
             athlete_name = row[0]
-            noc_name = row[1]
-            athletes.append(f'{athlete_name} {noc_name}')
+            athletes.append(f'{athlete_name}')
+
     except Exception as e:
         print(e, file=sys.stderr)
     
@@ -61,6 +59,7 @@ def get_golds():
             noc_name = row[0]
             gold_number = row[1]
             golds.append(f'{noc_name} {gold_number}')
+
     except Exception as e:
         print(e, file=sys.stderr)
 
@@ -94,28 +93,36 @@ def get_games():
     return games
 
 def main():
-    # Get a list of athlete names
-    input_noc = 'JAM'
-    # TODO specify country in print statement below!
-    print('~~~~~~~~~~ Athletes from NOC ~~~~~~~~~~')
-    athletes = get_athletes(input_noc)
-    for athlete in athletes:
-        print(athlete)
-    print()
 
-    # Get a list of NOCs and their golds
-    print(f'~~~~~~~~~~ NOCs and their Gold Medals ~~~~~~~~~~')
-    golds = get_golds()
-    for count in golds:
-        print(count)
-    print()
-
-    # Get a list of olympic games, their city, and year
-    print(f'~~~~~~~~~~ Olympic Games ~~~~~~~~~~')
-    games = get_games()
-    for game in games:
-        print(game)
-    print()
+    # Command line parsing
+    if len(sys.argv) == 2 and (sys.argv[1] == 'golds' or sys.argv[1] == 'games'):
+        if sys.argv[1] == 'golds':
+            # Get a list of NOCs and their golds
+            print(f'~~~~~~~~~~ NOCs and their Gold Medals ~~~~~~~~~~')
+            golds = get_golds()
+            for count in golds:
+                print(count)
+            print()
+        else:
+            # Get a list of olympic games, their city, and year
+            print(f'~~~~~~~~~~ Olympic Games ~~~~~~~~~~')
+            games = get_games()
+            for years in games:
+                print(years)
+            print()
+    elif len(sys.argv) == 3 and sys.argv[1] == 'athletes':
+        # Get a list of athlete names
+        input_noc = sys.argv[2]
+        print('~~~~~~~~~~ Athletes from ' + input_noc + ' ~~~~~~~~~~')
+        athletes = get_athletes(input_noc)
+        for athlete in athletes:
+            print(athlete)
+        print()
+    elif len(sys.argv) == 2 and sys.argv[0] == 'olympics.py' and sys.argv[1] == '-h':
+        with open('usage.txt', 'r') as help_file:
+            print(help_file.read())
+    else:
+        print('Usage error. For more information, please type: python3 olympics.py -h')
     
 if __name__ == '__main__':
     main()

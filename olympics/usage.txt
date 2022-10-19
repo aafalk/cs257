@@ -2,9 +2,10 @@ NAME
     olympics.py - python program that performs psql searches for user
 
 SYNOPSIS
-    olympics.py athletes [NOC]
-    olympics.py golds
-    olympics.py games
+    python3 olympics.py athletes -NOC
+    python3 olympics.py golds
+    python3 olympics.py games
+    python3 olympics.py -h
 
 DESCRIPTION
     athletes
@@ -15,15 +16,26 @@ DESCRIPTION
 
     games
         List all the olympic games in the database.
+    
+    -h
+        Display this message.
 
 OPTIONS
     athletes
-        [NOC]   Specifies the NOC from which the list of athletes will be derived.
+        -NOC    Specifies the NOC from which the list of athletes will be derived.
                 The NOC for a country is a 3 letter fully capitalized abbreviation.
+
+                Example: python3 olympics.py athletes JAM
+                This will return a list of all the athletes in the database who represent JAM (Jamaica).
     
     golds
         NO OPTIONS
     
     games
         NO OPTIONS
+    
+    -h
+        NO OPTIONS
 
+Authors
+    Alex Falk
