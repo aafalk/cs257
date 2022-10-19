@@ -16,6 +16,7 @@ AND medals.medal != 'NA'
 AND event_results.game_id = games.id
 ORDER BY games.year;
 
-SELECT medal_count.noc_id, medal_count.gold
-FROM medal_count
-ORDER BY medal_count.gold;
+SELECT nocs.noc, medal_count.gold
+FROM medal_count, nocs
+WHERE medal_count.noc_id = nocs.id
+ORDER BY medal_count.gold DESC;

@@ -1,0 +1,29 @@
+NAME
+    olympics.py - python program that performs psql searches for user
+
+SYNOPSIS
+    olympics.py athletes [NOC]
+    olympics.py golds
+    olympics.py games
+
+DESCRIPTION
+    athletes
+        List the names of all the athletes from a specified NOC.
+
+    golds
+        List all the NOCs and the number of gold medals they have won, in decreasing order of the number of gold medals.
+
+    games
+        List all the olympic games in the database.
+
+OPTIONS
+    athletes
+        [NOC]   Specifies the NOC from which the list of athletes will be derived.
+                The NOC for a country is a 3 letter fully capitalized abbreviation.
+    
+    golds
+        NO OPTIONS
+    
+    games
+        NO OPTIONS
+
